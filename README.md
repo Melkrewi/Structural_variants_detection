@@ -25,6 +25,14 @@ conda activate samtools_1.9
 conda install samtools=1.9
 conda deactivate
 ```
+Install cuteSV:
+```
+module load anaconda3/2024.03_deb12 ## This line and the next depend on what version of anaconda are installed on your cluster
+source ~/activate_anaconda3_2024.03_deb12.txt
+conda create -n cuteSV
+conda install -c bioconda cutesv
+conda deactivate
+```
 ## Read alignment
 
 Align the reads using NGMLR (you could also use minimap2):
@@ -68,21 +76,29 @@ samtools index alignment_315850.sorted.subsampled.bam
 ```
 
 ### Calling SVs using sniffles
-Generating a tandem repeat bed file (script can be found [here](https://github.com/PacificBiosciences/pbsv/tree/master/annotations):
-
+Generating a tandem repeat bed file (script can be found [here](https://github.com/PacificBiosciences/pbsv/tree/master/annotations)):
+```
 findTandemRepeats --merge Caenorhabditis_elegans.WBcel235.dna.toplevel.fa celegans.trf.bed
-
+```
 Call structural variants using sniffles (for more than one sample):
 ```
 module load anaconda3/2024.03_deb12 ## This line and the next depend on what version of anaconda are installed on your cluster
 source ~/activate_anaconda3_2024.03_deb12.txt
 conda activate sniffles_and_NGMLR
 
-module load samtools
-
-sniffles --input alignment1.sorted.bam --threads 60 --snf alignment1.snf #--output-rnames 
-sniffles --input alignment2.sorted.bam --threads 60 --snf alignment2.snf #--output-rnames 
-#sniffles --input alignment1.snf alignment2.snf --vcf multisample.vcf --threads 60 
+sniffles --input alignment_315848.sorted.bam --vcf alignment_315848.vcf --qc-output-all --mosaic --tandem-repeats celegans.trf.bed --threads 60 --output-rnames
+sniffles --input alignment_315850.sorted.subsampled.bam --vcf alignment_315850_subsampled.vcf --qc-output-all --mosaic --tandem-repeats celegans.trf.bed --threads 60 --output-rnames
 conda deactivate
-
 ```
+### Calling SVs using cuteSV
+```
+module load anaconda3/2024.03_deb12
+source ~/2024.03_deb12/activate_anaconda3_2024.03_deb12.txt
+conda activate cuteSV
+cuteSV alignment_315848.sorted.bam /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/2.analysis/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315848_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid 
+cuteSV alignment_315850.sorted.subsampled.bam /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/2.analysis/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315850_subsampled_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid
+conda deactivate
+```
+
+
+
