@@ -50,10 +50,27 @@ samtools index alignment_315848.sorted.bam
 samtools index alignment_315850.sorted.bam
 conda deactivate
 ```
-## Subsampling the alignments
+## Estimating the coverage per sample
+```
+module load samtools
 
+samtools coverage --histogram alignment_315850.sorted.subsampled.bam > alignment_315850.subsampled.coverage
+samtools coverage --histogram alignment_315848.sorted.bam > alignment_315848.coverage
 
+```
+### Subsampling the alignments
+We randomly sampled the alignments from the sample with the higher coverage to match the coverage of the other sample.
+```
+samtools view -bs 0.816 alignment_315850.sorted.bam > alignment_315850.sorted.subsampled.bam
+samtools sort alignment_315850.sorted.subsampled.bam > temp
+mv temp alignment_315850.sorted.subsampled.bam
+samtools index alignment_315850.sorted.subsampled.bam
+```
 
+### Calling SVs using sniffles
+Generating a tandem repeat bed file (script can be found (here)[https://github.com/PacificBiosciences/pbsv/tree/master/annotations]:
+
+findTandemRepeats --merge Caenorhabditis_elegans.WBcel235.dna.toplevel.fa celegans.trf.bed
 
 Call structural variants using sniffles (for more than one sample):
 ```
