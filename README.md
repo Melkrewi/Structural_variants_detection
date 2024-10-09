@@ -99,8 +99,8 @@ conda deactivate
 module load anaconda3/2024.03_deb12
 source ~/2024.03_deb12/activate_anaconda3_2024.03_deb12.txt
 conda activate cuteSV
-cuteSV alignment_315848.sorted.bam /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/2.analysis/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315848_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid 
-cuteSV alignment_315850.sorted.subsampled.bam /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/2.analysis/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315850_subsampled_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid
+cuteSV alignment_315848.sorted.bam Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315848_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid 
+cuteSV alignment_315850.sorted.subsampled.bam Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315850_subsampled_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid
 conda deactivate
 ```
 
