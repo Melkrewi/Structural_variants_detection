@@ -39,7 +39,7 @@ wget https://ftp.ensembl.org/pub/release-112/fasta/caenorhabditis_elegans/dna/Ca
 ```
 ## Read alignment
 
-Align the reads using NGMLR (you could also use minimap2):
+Align the reads using NGMLR:
 ```
 module load anaconda3/2024.03_deb12 ## This line and the next depend on what version of anaconda are installed on your cluster
 source ~/activate_anaconda3_2024.03_deb12.txt
