@@ -80,7 +80,7 @@ samtools index alignment_315850.sorted.subsampled.bam
 ```
 
 ### Calling SVs using sniffles
-Generating a tandem repeat bed file (script can be found [here](https://github.com/PacificBiosciences/pbsv/tree/master/annotations)):
+Generating tandem repeats bed file (script can be found [here](https://github.com/PacificBiosciences/pbsv/tree/master/annotations)):
 ```
 findTandemRepeats --merge Caenorhabditis_elegans.WBcel235.dna.toplevel.fa celegans.trf.bed
 ```
