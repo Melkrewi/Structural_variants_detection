@@ -33,6 +33,10 @@ conda create -n cuteSV
 conda install -c bioconda cutesv
 conda deactivate
 ```
+Download the c. elegans genome:
+```
+wget https://ftp.ensembl.org/pub/release-112/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz
+```
 ## Read alignment
 
 Align the reads using NGMLR (you could also use minimap2):
