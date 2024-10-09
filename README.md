@@ -66,7 +66,7 @@ conda deactivate
 ```
 module load samtools
 
-samtools coverage --histogram alignment_315850.sorted.subsampled.bam > alignment_315850.subsampled.coverage
+samtools coverage --histogram alignment_315850.sorted.bam > alignment_315850.coverage
 samtools coverage --histogram alignment_315848.sorted.bam > alignment_315848.coverage
 
 ```
