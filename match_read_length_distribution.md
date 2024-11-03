@@ -46,3 +46,5 @@ module load seqtk
 seqtk subseq PAW46587_1_202409050.fastq.gz mutant_sample_adjusted_distribution_reads.txt > 315850_adjusted.fastq
 seqtk subseq PAW50853_1_202409050.fastq.gz control_sample_adjusted_distribution_reads.txt > 315848_adjusted.fastq
 ```
+The following plots show the read length distrubtion before and after the subsampling:
+![alt text](https://github.com/Melkrewi/Structural_variants_detection/blob/02b689b6278937cdcb83b7e8b261acff6aff8429/subsampling_results_v2.png)
