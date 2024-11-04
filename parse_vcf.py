@@ -24,4 +24,4 @@ vcf['Number of reference reads']=vcf[9].str.split(':',expand=True)[2].fillna('NA
 vcf['Number of variant reads']=vcf[9].str.split(':',expand=True)[3].fillna('NA')
 vcf=vcf[['CHROM','QUAL','POS','SVTYPE','SVLEN','AF','Number of reference reads','Number of variant reads']]
 vcf.to_csv(output_file_name,index=False,sep='\t')
-#os.remove("vcf_temp.txt")
+os.remove("vcf_temp.txt")
