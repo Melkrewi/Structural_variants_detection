@@ -31,3 +31,10 @@ IV_chr=pd.DataFrame([['IV']*len(np.arange(0,chr_len[chr_len[0]=='IV'][2].iloc[0]
 X_chr=pd.DataFrame([['X']*len(np.arange(0,chr_len[chr_len[0]=='X'][2].iloc[0],100000)),np.arange(0,chr_len[chr_len[0]=='X'][2].iloc[0],100000),np.arange(100000,chr_len[chr_len[0]=='X'][2].iloc[0]+100000,100000)]).T
 pd.concat([I_chr,II_chr,III_chr,IV_chr,V_chr,X_chr],axis=0).to_csv("/nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/chromosomal_bins.bed",sep="\t",header=True,index=False)
 ```
+Use bedtools to get the overlap between the chromosomal windows, repeats and duplications:
+```
+module load bedtools
+bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/12.repeat_masker/output_ranges.bed -wo > repeats_in_chromosomal_bins.txt
+bedtools intersect -a chromosomal_bins.bed -b DUPs_control.vcf -wo > DUPs_control_in_chromosomal_bins.txt
+bedtools intersect -a chromosomal_bins.bed -b DUPs.vcf -wo > DUPs_mutant_in_chromosomal_bins.txt
+```
