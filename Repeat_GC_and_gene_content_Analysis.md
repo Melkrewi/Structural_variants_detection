@@ -77,4 +77,8 @@ Get the intersection between the duplications and the chromosomal bins:
 bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/DUPs_control.vcf -wo > DUPs_control_in_chromosomal_bins.txt
 bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/DUPs.vcf -wo > DUPs_mutant_in_chromosomal_bins.txt
 ```
+Calculate the GC content in windows of 100000 bp using [GCcalc](https://github.com/WenchaoLin/GCcalc):
+```
+python GCcalc.py -f Caenorhabditis_elegans.WBcel235.dna.toplevel.fa -w 100000 -s 100000 > gc_content.txt
+```
 Use the [jupyter notebook](https://github.com/Melkrewi/Structural_variants_detection/blob/c45b16d7252194c9142b49dcadfeb136dbad041e/analysis_repeats_gc_and_gene_content.ipynb) for the analysis.
