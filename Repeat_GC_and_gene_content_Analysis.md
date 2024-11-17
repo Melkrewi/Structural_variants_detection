@@ -1,4 +1,4 @@
-# Analysis of repeat content and duplications
+# Analysis of repeat content in duplications and deletions
 Download the genome annotation from wormbase:
 ```
 wget https://ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/WBPS19/species/caenorhabditis_elegans/PRJNA13758/caenorhabditis_elegans.PRJNA13758.WBPS19.annotations.gff3.gz
@@ -6,8 +6,8 @@ gunzip caenorhabditis_elegans.PRJNA13758.WBPS19.annotations.gff3.gz
 ```
 Extract the duplications from the vcf files:
 ```
-grep DUP /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/17.random_subread_mytool_random_state/alignment_315850_cuteSV.vcf > DUPs_mutant.vcf
-grep DUP /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/17.random_subread_mytool_random_state/control/alignment_315848_cuteSV.vcf > DUPs_control.vcf
+grep DUP /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/17.random_subread_mytool_random_state/alignment_315850_cuteSV.vcf > DUPs_mutant.vcf ## you need to add the vcf header to this
+grep DUP /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/17.random_subread_mytool_random_state/control/alignment_315848_cuteSV.vcf > DUPs_control.vcf ## you need to add the vcf header to this
 ```
 Get Chromosome lengths using seqkit:
 ```
@@ -76,6 +76,14 @@ Get the intersection between the duplications and the chromosomal bins:
 ```
 bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/DUPs_control.vcf -wo > DUPs_control_in_chromosomal_bins.txt
 bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/DUPs.vcf -wo > DUPs_mutant_in_chromosomal_bins.txt
+```
+Peforms the same analysis for deletions:
+```
+grep DEL /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/17.random_subread_mytool_random_state/alignment_315850_cuteSV.vcf > DELs_mutant.vcf ## you need to add the vcf header to this
+grep DEL /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/17.random_subread_mytool_random_state/control/alignment_315848_cuteSV.vcf > DELs_control.vcf ## you need to add the vcf header to this
+module load bedtools
+bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/DELs_control.vcf -wo > DELs_control_in_chromosomal_bins.txt 
+bedtools intersect -a chromosomal_bins.bed -b /nfs/scistore18/vicosgrp/melkrewi/C_elegands_project/20.mask_genome/DELs_mutant.vcf -wo > DELs_mutant_in_chromosomal_bins.txt
 ```
 Calculate the GC content in windows of 100000 bp using [GCcalc](https://github.com/WenchaoLin/GCcalc):
 ```
