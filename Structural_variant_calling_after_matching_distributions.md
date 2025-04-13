@@ -39,14 +39,14 @@ wget https://ftp.ensembl.org/pub/release-112/fasta/caenorhabditis_elegans/dna/Ca
 ```
 ## Read alignment
 
-Align the reads using NGMLR:
+Align the reads recovered after running the code from [Plotting and matching the read length distribution between the two libraries](https://github.com/Melkrewi/Structural_variants_detection/blob/1222ffcdc91b8e14f6de96e2c38bd0ecc455e7be/match_read_length_distribution.md) using NGMLR:
 ```
 module load anaconda3/2024.03_deb12 ## This line and the next depend on what version of anaconda are installed on your cluster
 source ~/activate_anaconda3_2024.03_deb12.txt
 conda activate sniffles_and_NGMLR
 
-ngmlr -x ont -t 100 -r Caenorhabditis_elegans.WBcel235.dna.toplevel.fa -q PAW46587_1_202409050.fastq.gz -o alignment_315850.sam
-ngmlr -t 100 -x ont -r Caenorhabditis_elegans.WBcel235.dna.toplevel.fa -q PAW50853_1_202409050.fastq.gz -o alignment_315848.sam
+ngmlr -x ont -t 100 -r Caenorhabditis_elegans.WBcel235.dna.toplevel.fa -q 315850_adjusted.fastq -o alignment_315850.sam
+ngmlr -t 100 -x ont -r Caenorhabditis_elegans.WBcel235.dna.toplevel.fa -q 315848_adjusted.fastq -o alignment_315848.sam
 ```
 Convert the alignment files to bam, then sort and index:
 ```
@@ -62,22 +62,6 @@ samtools index alignment_315848.sorted.bam
 samtools index alignment_315850.sorted.bam
 conda deactivate
 ```
-## Estimating the coverage per sample
-```
-module load samtools
-
-samtools coverage --histogram alignment_315850.sorted.bam > alignment_315850.coverage
-samtools coverage --histogram alignment_315848.sorted.bam > alignment_315848.coverage
-
-```
-### Subsampling the alignments
-We randomly sampled the alignments from the sample with the higher coverage to match the coverage of the other sample.
-```
-samtools view -bs 0.816 alignment_315850.sorted.bam > alignment_315850.sorted.subsampled.bam
-samtools sort alignment_315850.sorted.subsampled.bam > temp
-mv temp alignment_315850.sorted.subsampled.bam
-samtools index alignment_315850.sorted.subsampled.bam
-```
 
 ### Calling SVs using sniffles
 Generating tandem repeats bed file (script can be found [here](https://github.com/PacificBiosciences/pbsv/tree/master/annotations)):
@@ -90,8 +74,8 @@ module load anaconda3/2024.03_deb12 ## This line and the next depend on what ver
 source ~/activate_anaconda3_2024.03_deb12.txt
 conda activate sniffles_and_NGMLR
 
-sniffles --input alignment_315848.sorted.bam --vcf alignment_315848.vcf --qc-output-all --mosaic --tandem-repeats celegans.trf.bed --threads 60 --output-rnames
-sniffles --input alignment_315850.sorted.subsampled.bam --vcf alignment_315850_subsampled.vcf --qc-output-all --mosaic --tandem-repeats celegans.trf.bed --threads 60 --output-rnames
+sniffles --input alignment_315848.sorted.bam --vcf alignment_315848_sniffles.vcf --qc-output-all --mosaic --tandem-repeats ../celegans.trf.bed --threads 60 --output-rnames
+sniffles --input alignment_315850.sorted.bam --vcf alignment_315850_sniffles.vcf --qc-output-all --mosaic --tandem-repeats celegans.trf.bed --threads 60 --output-rnames
 conda deactivate
 ```
 ### Calling SVs using cuteSV
@@ -99,7 +83,7 @@ conda deactivate
 module load anaconda3/2024.03_deb12
 source ~/2024.03_deb12/activate_anaconda3_2024.03_deb12.txt
 conda activate cuteSV
-cuteSV alignment_315848.sorted.bam Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315848_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid 
-cuteSV alignment_315850.sorted.subsampled.bam Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315850_subsampled_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS	100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid
+srun cuteSV alignment_315848.sorted.bam Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315848_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid
+srun cuteSV alignment_315850.sorted.bam Caenorhabditis_elegans.WBcel235.dna.toplevel.fa alignment_315850_cuteSV.vcf . --min_support 1 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 100 --diff_ratio_merging_DEL 0.3 --report_readid 
 conda deactivate
 ```
